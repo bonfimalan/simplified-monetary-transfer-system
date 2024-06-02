@@ -1,5 +1,7 @@
 package io.github.bonfimalan.simplified_monetary_transfer_system.service;
 
+import io.github.bonfimalan.simplified_monetary_transfer_system.api.exception.ConflictException;
+import io.github.bonfimalan.simplified_monetary_transfer_system.api.exception.NotFoundException;
 import io.github.bonfimalan.simplified_monetary_transfer_system.api.request.DepositRequest;
 import io.github.bonfimalan.simplified_monetary_transfer_system.domain.User;
 import io.github.bonfimalan.simplified_monetary_transfer_system.repository.UserRepository;
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
+import static java.lang.String.format;
 import static org.apache.logging.log4j.util.Strings.isNotEmpty;
 
 @Service
@@ -18,7 +20,7 @@ public class UserService {
 
     public User getUser(String userId) {
         return repository.findById(userId)
-                .orElseThrow(RuntimeException::new); // TODO handle better the exceptions
+                .orElseThrow(() -> new NotFoundException(format("Could not find User with id %s", userId)));
     }
 
     public User save(User user) {
@@ -40,7 +42,7 @@ public class UserService {
 
     private User createUser(User user) {
         if(repository.findByDocumentOrEmail(user.getDocument(), user.getEmail()).isPresent()) {
-            throw new RuntimeException(); // TODO change this to a conflict exception
+            throw new ConflictException("There's already a User with the specified document or email");
         }
 
         return repository.save(user);
