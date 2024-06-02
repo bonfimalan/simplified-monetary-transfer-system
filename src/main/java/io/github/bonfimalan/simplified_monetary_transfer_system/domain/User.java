@@ -1,14 +1,13 @@
 package io.github.bonfimalan.simplified_monetary_transfer_system.domain;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @Document("User")
-public class User {
-    @Id
-    private String id;
+public class User extends BaseEntity {
     private String fullName;
     private String document;
     private String email;

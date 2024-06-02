@@ -20,8 +20,8 @@ public class TransactionService {
         validator.validateTransaction(payer, transaction.getValue());
         var payee = userService.getUser(transaction.getPayee());
 
-        payer.setBalance(payer.getBalance() - transaction.getValue());
-        payee.setBalance(payer.getBalance() + transaction.getValue());
+        payer.removeBalance(transaction.getValue());
+        payee.addBalance(transaction.getValue());
         userService.saveAll(List.of(payer, payee));
 
         return repository.save(transaction);

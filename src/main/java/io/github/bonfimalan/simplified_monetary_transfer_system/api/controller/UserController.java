@@ -8,6 +8,7 @@ import io.github.bonfimalan.simplified_monetary_transfer_system.service.UserServ
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public UserResponse create(UserCreationRequest creationRequest) {
+    public UserResponse create(@RequestBody UserCreationRequest creationRequest) {
         var userToBeCreated = converter.toEntity(creationRequest);
 
         var createdUser = service.save(userToBeCreated);
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PatchMapping("/deposit")
-    public UserResponse deposit(DepositRequest creationRequest) {
+    public UserResponse deposit(@RequestBody DepositRequest creationRequest) {
         var updatedUser = service.deposit(creationRequest);
 
         return converter.toResponse(updatedUser);
