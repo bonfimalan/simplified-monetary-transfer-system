@@ -1,5 +1,7 @@
 plugins {
 	id 'java'
+	id 'idea'
+	id 'jvm-test-suite'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
 }
@@ -9,6 +11,25 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '21'
+}
+
+testing {
+	suites {
+		integrationTests(JvmTestSuite) {
+			dependencies {
+				implementation(project())
+				implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+				implementation 'org.springframework.boot:spring-boot-starter-web'
+				implementation 'org.springframework.boot:spring-boot-starter-test'
+				implementation 'io.rest-assured:rest-assured:5.4.0'
+				implementation 'net.datafaker:datafaker:2.2.2'
+			}
+		}
+	}
+}
+
+tasks.named('check') {
+	dependsOn testing.suites.integrationTests
 }
 
 configurations {
@@ -26,8 +47,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
