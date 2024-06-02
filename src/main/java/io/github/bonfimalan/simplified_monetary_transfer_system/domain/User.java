@@ -15,4 +15,12 @@ public class User {
     private String password;
     private UserType userType;
     private double balance;
+
+    public void addBalance(double value) {
+        this.balance += value;
+    }
+
+    public void removeBalance(double value) {
+        this.balance -= value;
+    }
 }
